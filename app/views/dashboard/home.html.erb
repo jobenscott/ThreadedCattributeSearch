@@ -338,6 +338,8 @@
 			} else {
 				if(sale_and_sire == "") {
 					sale_and_sire = "";
+				} else {
+					sale_and_sire = "&include=sire&orderBy=current_price";
 				}
 			}
 		});
@@ -356,6 +358,8 @@
 			} else {
 				if(sale_and_sire == "") {
 					sale_and_sire = "";
+				} else {
+					sale_and_sire = "&include=sale&orderBy=current_price";
 				}
 			}
 		});
@@ -373,6 +377,7 @@
 
 			url_string_array = [];
 
+			$(this).parent().parent().parent().parent().siblings('div.kitty-area').children('div.col-md-8').children('div.traits-requested').removeClass('traits-requested');
 			$(this).parent().parent().parent().parent().siblings('div.kitty-area').children('div.col-md-8').empty();
 
 			var selected_traits = $('.chosen-trait');
@@ -503,11 +508,13 @@
 								}
 								if(kitty.length < 1) { 
 									$(el).children('.row').children('.kitty').append('<div class="kitty-container the-kitty" width="150px"><a class="kitty-'+this.id+' the-kitty" href="https://www.cryptokitties.co/kitty/'+this.id+'" target="_blank"><img class="the-kitty" width="150" src="'+this.image_url+'"><div class="the-kitty  kitty-id-display">'+this.id+'</div></a></div>');
-									if(sale_and_sire.length > 0) {
+									if(this.auction.current_price != undefined) {x
 										var listing_type = this.auction.type;
 										var price = this.auction.current_price;
 										price = (price / 1000000000000000000);
 										$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div class="kitty-price">'+listing_type+': '+(Math.ceil(price * 100) / 100)+'</div>'))
+									} else {
+										$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div class="kitty-price">No Listing</div>'));
 									}
 									delete kitties[url_string];
 								}
@@ -518,12 +525,14 @@
 								$(el).append('<div class="row the-kitty"><div class="col-md-12 kitty the-kitty"></div></div>');
 							}
 							$(kitties[url_string]).each(function(){
-								$(el).children('.row').children('.kitty').append('<div class="kitty-container the-kitty" width="150px"><a class="the-kitty" href="https://www.cryptokitties.co/kitty/'+this.id+'" target="_blank"><img class="the-kitty kitty-id-display" width="150" src="'+this.image_url+'"><div class="the-kitty kitty-id-display">'+this.id+'</div></a></div>');
-								if(sale_and_sire.length > 0) {
+								$(el).children('.row').children('.kitty').append('<div class="kitty-container the-kitty" width="150px"><a class="kitty-'+this.id+' the-kitty" href="https://www.cryptokitties.co/kitty/'+this.id+'" target="_blank"><img class="the-kitty kitty-id-display" width="150" src="'+this.image_url+'"><div class="the-kitty kitty-id-display">'+this.id+'</div></a></div>');
+								if(this.auction.current_price != undefined) {
 									var listing_type = this.auction.type;
 									var price = this.auction.current_price;
 									price = (price / 1000000000000000000);
-									$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div class="kitty-price">'+listing_type+': '+(Math.ceil(price * 100) / 100)+'</div>'))
+									$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div class="kitty-price">'+listing_type+': '+(Math.ceil(price * 100) / 100)+'</div>'));
+								} else {
+									$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div class="kitty-price">No Listing</div>'));
 								}
 								delete kitties[url_string];
 							});
