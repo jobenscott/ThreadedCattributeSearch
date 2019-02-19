@@ -221,7 +221,9 @@
 		});
 
 
-
+		$(document).on('dblclick', 'div.list-trait', function(){
+			$(this).remove();
+		});
 
 		var cattys = <%= @cattribute_collection.to_json.html_safe %>;
 
