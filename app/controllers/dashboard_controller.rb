@@ -1,7 +1,8 @@
 class DashboardController < ApplicationController
 	require 'open-uri'
   def home
-  	@cattribute_collection = Cattribute.all.group_by(&:readable_category)
+  	# @cattribute_collection = Cattribute.all.group_by(&:readable_category)
+  	get_cattributes
   end
 
   def get_traits
