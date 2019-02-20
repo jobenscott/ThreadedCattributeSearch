@@ -23,10 +23,10 @@
 			<div class="col-md-1"></div>
 		</div>
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-7">
 				<div class="row">
-					<div class="col-md-4"></div>
-					<div class="col-md-4">
+					<div class="col-md-2"></div>
+					<div class="col-md-6">
 						<div class="input-group input-group-sm mb-3">
 						  <div class="input-group-prepend">
 						    <span class="input-group-text" id="inputGroup-sizing-sm">Combo #</span>
@@ -46,6 +46,12 @@
 						  </div>
 						  <input type="checkbox" class="form-control" id="sire-kitties" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
 						</div>
+						<div class="input-group input-group-sm mb-3">
+						  <div class="input-group-prepend">
+						    <span class="input-group-text" id="inputGroup-sizing-sm"><strong>My Kitties</strong>(your address)</span>
+						  </div>
+						  <input type="text" class="form-control" id="user-address" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+						</div>
 					</div>
 					<div class="col-md-4"><button class="btn btn-primary" id="get-combos">Get Combos</button></div>
 				</div>
@@ -62,6 +68,11 @@
 </html>
 
 <style type="text/css">
+
+	.input-group-text {
+		width: 200px !important;
+	}
+
 	.cattribute-pick .col-md-1 {
 		padding: 0 !important;
 		text-align: center;
@@ -216,7 +227,7 @@
 		$(document).on('focusout', '.trait-search', function(e){
 			var type = $(this).data('type');
 			$(this).parent().html(type);
-		})
+		});
 
 
 		$(document).on('click', '.result', function(){
@@ -393,9 +404,14 @@
 		var final_array = [];
 		var combo;
 
+		var user_address = "";
 
 		$('body').on('click', '#get-combos', function(){
 
+			
+			if($('#user-address').val().length > 1) {
+				user_address = '&owner_wallet_address=' + $('#user-address').val();
+			}
 
 			url_string_array = [];
 
@@ -497,7 +513,7 @@
 
 			$.ajax({
 				url: "/dashboard/get_traits",
-				data: {url: "https://public.api.cryptokitties.co/v1/kitties?cattributes="+url_string+"&offset="+offset+sale_and_sire},
+				data: {url: "https://public.api.cryptokitties.co/v1/kitties?cattributes="+url_string+"&offset="+offset+sale_and_sire+user_address},
 				success: function(data) {
 					if(kitties[url_string] === undefined) {
 						kitties[url_string] = [];
@@ -534,7 +550,7 @@
 									if(this.auction.current_price != undefined) {
 										var listing_type = this.auction.type;
 										var price = this.auction.current_price;
-										price = (price / 1000000000000000000);
+										price = (price / 100000000000000000);
 										$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div style="background:lightgreen;" class="kitty-price">For '+listing_type+'<small> Ξ </small>'+(Math.ceil(price * 100) / 1000)+'</div>'))
 									} else {
 										$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div class="kitty-price">No Listing</div>'));
@@ -552,7 +568,7 @@
 								if(this.auction.current_price != undefined) {
 									var listing_type = this.auction.type;
 									var price = this.auction.current_price;
-									price = (price / 1000000000000000000);
+									price = (price / 100000000000000000);
 									$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div style="background:lightgreen;" class="kitty-price">For '+listing_type+'<small> Ξ </small>'+(Math.ceil(price * 100) / 1000)+'</div>'));
 								} else {
 									$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div class="kitty-price">No Listing</div>'));
