@@ -186,12 +186,20 @@
 		width: 150px;
 		text-align: center;
 	}
+	.the-kitty.cooldown {
+		width: 150px;
+		text-align: center;
+		margin-top: 2px;
+		margin-bottom: 2px;
+	}
 </style>
 
 <script type="text/javascript">
 	jQuery(function($){
 
 		var sale_and_sire = "";
+
+		var cooldowns = ["Fast - 1 Min", "Swift - 2 Min", "Swift - 5 Min", "Snappy - 10 Min", "Snappy - 30 Min", "Brisk - 1 Hour", "Brisk - 2 Hour", "Plodding - 4 Hour", "Plodding - 8 Hour", "Slow - 16 Hour", "Slow - 1 Day", "Sluggish - 2 Days", "Sluggish - 4 Days", "Catatonic - 7 Days"];
 
 		$(document).on('click', '.close-div', function(){
 			var type = $(this).data('type');
@@ -522,7 +530,7 @@
 									$(el).append('<div class="row the-kitty"><div class="col-md-12 kitty the-kitty"></div></div>');
 								}
 								if(kitty.length < 1) { 
-									$(el).children('.row').children('.kitty').append('<div class="kitty-container the-kitty" width="150px"><a class="kitty-'+this.id+' the-kitty" href="https://www.cryptokitties.co/kitty/'+this.id+'" target="_blank"><img class="the-kitty" width="150" src="'+this.image_url+'"><div class="the-kitty gen">Gen '+this.generation+'</div><div class="the-kitty  kitty-id-display">'+this.id+'</div></a></div>');
+									$(el).children('.row').children('.kitty').append('<div class="kitty-container the-kitty" width="150px"><a class="kitty-'+this.id+' the-kitty" href="https://www.cryptokitties.co/kitty/'+this.id+'" target="_blank"><img class="the-kitty" width="150" src="'+this.image_url+'"><div class="the-kitty gen">Gen '+this.generation+'</div><div class="the-kitty cooldown">'+cooldowns[this.status.cooldown_index]+'</div><div class="the-kitty  kitty-id-display">'+this.id+'</div></a></div>');
 									if(this.auction.current_price != undefined) {
 										var listing_type = this.auction.type;
 										var price = this.auction.current_price;
@@ -540,7 +548,7 @@
 								$(el).append('<div class="row the-kitty"><div class="col-md-12 kitty the-kitty"></div></div>');
 							}
 							$(kitties[url_string]).each(function(){
-								$(el).children('.row').children('.kitty').append('<div class="kitty-container the-kitty" width="150px"><a class="kitty-'+this.id+' the-kitty" href="https://www.cryptokitties.co/kitty/'+this.id+'" target="_blank"><img class="the-kitty kitty-id-display" width="150" src="'+this.image_url+'"><div class="the-kitty gen">Gen '+this.generation+'</div><div class="the-kitty kitty-id-display">'+this.id+'</div></a></div>');
+								$(el).children('.row').children('.kitty').append('<div class="kitty-container the-kitty" width="150px"><a class="kitty-'+this.id+' the-kitty" href="https://www.cryptokitties.co/kitty/'+this.id+'" target="_blank"><img class="the-kitty kitty-id-display" width="150" src="'+this.image_url+'"><div class="the-kitty gen">Gen '+this.generation+'</div><div class="the-kitty cooldown">'+cooldowns[this.status.cooldown_index]+'</div><div class="the-kitty kitty-id-display">'+this.id+'</div></a></div>');
 								if(this.auction.current_price != undefined) {
 									var listing_type = this.auction.type;
 									var price = this.auction.current_price;
