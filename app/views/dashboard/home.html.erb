@@ -160,25 +160,31 @@
 	}
 
 	.kitty-container.the-kitty {
-		width: 150px !important;
+		width: 149px !important;
 	}
 
 	div.kitty-id-display {
 		text-align: center !important;
 		width: 150px !important;
+		background: lightgray;
 	}
 
 	.kitty-container {
-		border: solid black .1px !important;
+		border: solid black .5px !important;
 	}
 
 	.kitty-price {
-		width: 150px;
+		width: 149px;
 		text-align: center;
 	}
 
 	a.the-kitty {
 		text-decoration: none !important;
+	}
+
+	.the-kitty.gen {
+		width: 150px;
+		text-align: center;
 	}
 </style>
 
@@ -332,14 +338,18 @@
 			if (this.checked) {
 				if(sale_and_sire == "") {
 					sale_and_sire = "&include=sale&orderBy=current_price";
-				} else if (sale_and_sire = "&include=sire&orderBy=current_price") {
+				} else if (sale_and_sire == "&include=sire&orderBy=current_price") {
 					sale_and_sire = "&include=sire,sale&orderBy=current_price"
 				} 
 			} else {
 				if(sale_and_sire == "") {
 					sale_and_sire = "";
 				} else {
-					sale_and_sire = "&include=sire&orderBy=current_price";
+					if($('#sire-kitties').is(':checked')) {
+					    sale_and_sire = "&include=sire&orderBy=current_price";
+					} else {
+						sale_and_sire = "";
+					}
 				}
 			}
 		});
@@ -352,14 +362,18 @@
 			if (this.checked) {
 				if(sale_and_sire == "") {
 					sale_and_sire = "&include=sire&orderBy=current_price";
-				} else if (sale_and_sire = "&include=sale&orderBy=current_price") {
-					sale_and_sire = "&include=sale,sire&orderBy=current_price"
+				} else if (sale_and_sire == "&include=sale&orderBy=current_price") {
+					sale_and_sire = "&include=sale,sire&orderBy=current_price";
 				} 
 			} else {
 				if(sale_and_sire == "") {
 					sale_and_sire = "";
 				} else {
-					sale_and_sire = "&include=sale&orderBy=current_price";
+                    if($('#sale-kitties').is(':checked')) {
+					    sale_and_sire = "&include=sale&orderBy=current_price";
+                    } else {
+                    	sale_and_sire = "";
+                    }
 				}
 			}
 		});
@@ -485,6 +499,7 @@
 						$(data.kitties).each(function(){
 							if(kitties[url_string].indexOf(this) === -1) {
 								kitties[url_string].push(this);
+								console.log(this);
 							}
 						});
 
@@ -507,12 +522,12 @@
 									$(el).append('<div class="row the-kitty"><div class="col-md-12 kitty the-kitty"></div></div>');
 								}
 								if(kitty.length < 1) { 
-									$(el).children('.row').children('.kitty').append('<div class="kitty-container the-kitty" width="150px"><a class="kitty-'+this.id+' the-kitty" href="https://www.cryptokitties.co/kitty/'+this.id+'" target="_blank"><img class="the-kitty" width="150" src="'+this.image_url+'"><div class="the-kitty  kitty-id-display">'+this.id+'</div></a></div>');
-									if(this.auction.current_price != undefined) {x
+									$(el).children('.row').children('.kitty').append('<div class="kitty-container the-kitty" width="150px"><a class="kitty-'+this.id+' the-kitty" href="https://www.cryptokitties.co/kitty/'+this.id+'" target="_blank"><img class="the-kitty" width="150" src="'+this.image_url+'"><div class="the-kitty gen">Gen '+this.generation+'</div><div class="the-kitty  kitty-id-display">'+this.id+'</div></a></div>');
+									if(this.auction.current_price != undefined) {
 										var listing_type = this.auction.type;
 										var price = this.auction.current_price;
 										price = (price / 1000000000000000000);
-										$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div class="kitty-price">'+listing_type+': '+(Math.ceil(price * 100) / 100)+'</div>'))
+										$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div style="background:lightgreen;" class="kitty-price">For '+listing_type+'<small> Ξ </small>'+(Math.ceil(price * 100) / 1000)+'</div>'))
 									} else {
 										$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div class="kitty-price">No Listing</div>'));
 									}
@@ -525,12 +540,12 @@
 								$(el).append('<div class="row the-kitty"><div class="col-md-12 kitty the-kitty"></div></div>');
 							}
 							$(kitties[url_string]).each(function(){
-								$(el).children('.row').children('.kitty').append('<div class="kitty-container the-kitty" width="150px"><a class="kitty-'+this.id+' the-kitty" href="https://www.cryptokitties.co/kitty/'+this.id+'" target="_blank"><img class="the-kitty kitty-id-display" width="150" src="'+this.image_url+'"><div class="the-kitty kitty-id-display">'+this.id+'</div></a></div>');
+								$(el).children('.row').children('.kitty').append('<div class="kitty-container the-kitty" width="150px"><a class="kitty-'+this.id+' the-kitty" href="https://www.cryptokitties.co/kitty/'+this.id+'" target="_blank"><img class="the-kitty kitty-id-display" width="150" src="'+this.image_url+'"><div class="the-kitty gen">Gen '+this.generation+'</div><div class="the-kitty kitty-id-display">'+this.id+'</div></a></div>');
 								if(this.auction.current_price != undefined) {
 									var listing_type = this.auction.type;
 									var price = this.auction.current_price;
 									price = (price / 1000000000000000000);
-									$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div class="kitty-price">'+listing_type+': '+(Math.ceil(price * 100) / 100)+'</div>'));
+									$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div style="background:lightgreen;" class="kitty-price">For '+listing_type+'<small> Ξ </small>'+(Math.ceil(price * 100) / 1000)+'</div>'));
 								} else {
 									$($(el).children('.row').children('.kitty').children('.kitty-container').children('a.kitty-'+this.id).prepend('<div class="kitty-price">No Listing</div>'));
 								}
