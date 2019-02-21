@@ -172,6 +172,7 @@
 
 	.kitty-container.the-kitty {
 		width: 149px !important;
+		margin: 12px 0 0 28px;
 	}
 
 	div.kitty-id-display {
@@ -203,6 +204,30 @@
 		margin-top: 2px;
 		margin-bottom: 2px;
 	}
+	.kitty-load {
+		float:left !important;
+		line-height:2.5 !important;
+	}
+
+	.al-load {
+		-webkit-animation: spin 2.5s infinite linear;
+	}
+
+
+
+	@-moz-keyframes spin {
+    from { -moz-transform: rotate(0deg); }
+    to { -moz-transform: rotate(359deg); }
+	}
+	@-webkit-keyframes spin {
+	    from { -webkit-transform: rotate(0deg); }
+	    to { -webkit-transform: rotate(359deg); }
+	}
+	@keyframes spin {
+	    from {transform:rotate(0deg);}
+	    to {transform:rotate(359deg);}
+	}
+
 </style>
 
 <script type="text/javascript">
@@ -219,6 +244,7 @@
 			$(this).remove();
 		});
 
+		var al_loading = '<%= image_tag("al_loading.png", size: "45") %>';
 
 		$(document).on('click', "a.nav-link", function (e) {
 		    $(this)[0].tab('show');
@@ -477,7 +503,6 @@
 				}
 			});
 		}
-		
 
 		$(document).on('click', '.kitty-section', function(e){
 			
@@ -485,6 +510,15 @@
 				var url_string = $(this).data('url-string');
 				getKitties(url_string, this);
 				$(this).addClass('traits-requested');
+
+				var loading_span = $(this).children().children().children().children('.kitty-load');
+
+				$(loading_span).html(al_loading);
+				$(loading_span).addClass('al-load');
+				animateLoad(loading_span)
+
+
+
 			} else {
 				if(($(e.target).hasClass('for-toggle'))) {
 					$(this).children('.row').toggleClass('no-height');
@@ -500,7 +534,7 @@
 			$(url_strings).each(function(key){
 				var display = this.replace(/,/g, " - ");
 				display = display.replace(/\b\w/g, l => l.toUpperCase());
-				$(kitty_display).append('<div data-url-string="'+this+'" class="row kitty-section"><div class="col-md-12"><div class="row collap-section"><div class="col-md-12 for-toggle">'+display+'</div></div></div></div>');
+				$(kitty_display).append('<div data-url-string="'+this+'" class="row kitty-section"><div class="col-md-12"><div class="row collap-section"><div class="col-md-12 for-toggle"><span class="kitty-load">Click To Load</span>'+display+'</div></div></div></div>');
 			});
 		}
 
@@ -510,6 +544,7 @@
 				kitties = [];
 			}
 			var id_sring = url_string.replace(/,/g, "-");
+			var loading_span = $(el).children().children().children().children('.kitty-load');
 
 			$.ajax({
 				url: "/dashboard/get_traits",
@@ -523,7 +558,6 @@
 						$(data.kitties).each(function(){
 							if(kitties[url_string].indexOf(this) === -1) {
 								kitties[url_string].push(this);
-								console.log(this);
 							}
 						});
 
@@ -580,6 +614,10 @@
 						$(el).append('<div class="row"><div class="col-md-12"><h4>No Kitties with this combo</h4></div></div>');
 					}
 					
+				},
+				complete: function() {
+					$(loading_span).removeClass('al-load');
+					$(loading_span).html("Kitty's Loaded!");
 				}
 			});
 		}
